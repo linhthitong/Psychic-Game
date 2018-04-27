@@ -4,6 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <title>The Psychic Game</title>
+
+
+  <link rel="stylesheet" type="text/css" href="css/reset.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+
+
 </head>
 
 <body>
@@ -11,11 +17,16 @@
   <h1>The Psychic Game</h1>
     <div id="game">
     <p>Guess what letter I'm thinking of? Press a letter key to start playing!</p>
+    <p>wins: <span id="wins"></span></p>
+    <!-- <p> Guess what letter I'm thinking of? Press a letter key to start playing!</p><br/> -->
+    <p>losses: <span id="losses"></span></p>
+    <p>guesses left: <span id="guessesLeft"></span></p>
+    <p>guesses so far: <span id="guessesSoFar"></span></p>
   </div>
 
   <script type="text/javascript">
 
-  // User has 10 guesses to start
+  // User has 5 guesses to start
   // User makes a choice
   // Computer makes a choice
   // Compare the two choices, and determine a win or loss
@@ -27,44 +38,76 @@
     var wins = 0;
     var losses = 0;
     var guessesLeft = 5;
-    var guessesSoFar = 0;
+    var guessesSoFar = [];
+   
 
- // Creates an array that lists out all the letteres in the alphabet.
-    
- var computerChoices = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q","r","s", "t", "u", "v", "w", "x", "y", "z"];
-
-  // This function is run whenever the user presses a key.
-      document.onkeyup = function(event) { 
-        var userGuess = event.key;
-        // toLowerCase(userGuess); 
-        console.log(userGuess);
-      
-    
+    // Creates an array that lists out all the letteres in the alphabet.
+    var computerChoices = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q","r","s", "t", "u", "v", "w", "x", "y", "z"];
     var computerGuess = computerChoices[Math.floor(Math.random()*computerChoices.length)];
-      console.log(computerGuess);
+    console.log(computerGuess);
+ 
+  document.getElementById("wins").textContent = wins
+  document.getElementById("losses").textContent = losses
+  document.getElementById("guessesLeft").textContent = guessesLeft
+  
+  // This function is run whenever the user presses a key.
+    document.onkeyup = function(event) { 
+      var userGuess = event.key.toLowerCase();
+    
+      // function handleGame() {
 
-      if (userGuess==="a" || userGuess==="b" || userGuess==="c" || userGuess==="d" || userGuess==="e" || userGuess==="f" || userGuess==="g" || userGuess==="h" || userGuess==="i" || userGuess==="j" || userGuess==="k" || userGuess==="l" || userGuess==="m" || userGuess==="n" || userGuess==="o" || userGuess==="p" || userGuess==="q" || userGuess==="r" || userGuess==="s" || userGuess==="t" || userGuess==="u" || userGuess==="v" || userGuess==="w" || userGuess==="x" || userGuess==="y" || userGuess==="z") {
+      // if (userGuess==="a" || userGuess==="b" || userGuess==="c" || userGuess==="d" || userGuess==="e" || userGuess==="f" || userGuess==="g" || userGuess==="h" || userGuess==="i" || userGuess==="j" || userGuess==="k" || userGuess==="l" || userGuess==="m" || userGuess==="n" || userGuess==="o" || userGuess==="p" || userGuess==="q" || userGuess==="r" || userGuess==="s" || userGuess==="t" || userGuess==="u" || userGuess==="v" || userGuess==="w" || userGuess==="x" || userGuess==="y" || userGuess==="z") {
+      if (event.keyCode >= 97 && event.keyCode <= 122 || event.keyCode >= 65 && event.keyCode <= 90) {
+        console.log(userGuess);
 
-        if (userGuess === computerGuess){
-          wins++;
-          alert("Wins:" + wins);
-        } else {
-          losses++;
-          alert("Losses:" + losses);
+        if(!guessesSoFar.includes(userGuess)){
+          guessesLeft--
+          document.getElementById("guessesLeft").textContent = guessesLeft;
+          guessesSoFar.push(userGuess)
+          document.getElementById("guessesSoFar").textContent = guessesSoFar.join(", ");
+          if (userGuess === computerGuess){
+              wins++;
+              document.getElementById("wins").textContent = wins
+              alert("Wins:" + wins);
+              guessesLeft = 5
+              document.getElementById("guessesLeft").textContent = guessesLeft;
+              guessesSoFar = []
+              document.getElementById("guessesSoFar").textContent = "";
+
+            } else if(guessesLeft === 0) {
+              losses++;
+              document.getElementById("losses").textContent = losses
+              alert("Losses:" + losses);
+              guessesLeft = 5
+              document.getElementById("guessesLeft").textContent = guessesLeft;
+              guessesSoFar = []
+              document.getElementById("guessesSoFar").textContent = "";
+            }
         }
-      } else {
+      }else {
         alert("You need to enter a letter.");
       }
-      
-      var html = "<p> Guess what letter I'm thinking of? Press a letter key to start playing!</p>" +
-      "<p>wins: " + wins + "</p>" +
-      "<p>losses: " + losses + "</p" +
-      "<p>guesses left: " + guessesLeft + "</p" +
-      "<p>guesses so far: " + guessesSoFar + "</p";
-            
-      document.querySelector("#game").innerHTML = html;
-
       }
+
+      // if (userGuess==="a" || userGuess==="b" || userGuess==="c" || userGuess==="d" || userGuess==="e" || userGuess==="f" || userGuess==="g" || userGuess==="h" || userGuess==="i" || userGuess==="j" || userGuess==="k" || userGuess==="l" || userGuess==="m" || userGuess==="n" || userGuess==="o" || userGuess==="p" || userGuess==="q" || userGuess==="r" || userGuess==="s" || userGuess==="t" || userGuess==="u" || userGuess==="v" || userGuess==="w" || userGuess==="x" || userGuess==="y" || userGuess==="z") {
+
+        
+
+        // } else {
+          // a
+
+      //switch/case js
+      
+      // var html = "<p> Guess what letter I'm thinking of? Press a letter key to start playing!</p><br/>" +
+      // "<p>wins: " + wins + "</p>" +
+      // "<p>losses: " + losses + "</p" +
+      // "<p>guesses left: " + guessesLeft + "</p" +
+      // "<p>guesses so far: " + guessesSoFar + "</p>";
+            
+      // document.querySelector("#game").innerHTML = html;
+ 
+
+      
 
     </script>
 
